@@ -8,8 +8,19 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/action', function(req, res, next) {
-  
-  
+
+  var yamaha = new YamahaAPI("66.214.18.129");
+
+  // yamaha.getAvailableInputs().then(function(inputs){
+  //   console.log(inputs)
+  // });
+
+  yamaha.powerOn().then(function(){
+    console.log("powerOn");
+      yamaha.setMainInputTo("AUDIO1");
+
+  });
+
   res.status(200).send("ok");
 });
 
