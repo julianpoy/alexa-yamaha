@@ -17,7 +17,7 @@ router.post('/action', function(req, res, next) {
 
   yamaha.powerOn().then(function(){
     console.log("powerOn");
-      yamaha.setMainInputTo("AUDIO1");
+      yamaha.setMainInputTo("AUDIO2");
 
   });
 
