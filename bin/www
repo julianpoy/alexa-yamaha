@@ -7,20 +7,64 @@
 var app = require('../app');
 var debug = require('debug')('alexa-yamaha:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
+var sslPath = "./ssl";
+var enableSSL = true;
+
+try {
+    stats = fs.lstatSync(sslPath);
+    var sslOptions = {
+         key: fs.readFileSync(sslPath + '/privkey.pem'),
+         cert: fs.readFileSync(sslPath + '/fullchain.pem'),
+         ca: fs.readFileSync(sslPath + '/chain.pem'),
+         ciphers: [
+        "ECDHE-RSA-AES128-GCM-SHA256",
+        "ECDHE-ECDSA-AES128-GCM-SHA256",
+        "ECDHE-RSA-AES256-GCM-SHA384",
+        "ECDHE-ECDSA-AES256-GCM-SHA384",
+        "DHE-RSA-AES128-GCM-SHA256",
+        "ECDHE-RSA-AES128-SHA256",
+        "DHE-RSA-AES128-SHA256",
+        "AES128-GCM-SHA256",
+        "!RC4", // RC4 be gone
+        "HIGH",
+        "!MD5",
+        "!aNULL"
+        ].join(':'),
+        honorCipherOrder: true
+    }
+    console.log("-- SSL Enabled --");
+} catch (e) {
+    console.log("SSL Read Error: ", e);
+    enableSSL = false;
+    console.log("-- SSL Disabled --");
+    console.log("If you are on a production server and this message is occuring, make sure you are running with elevated permissions.");
+    console.log("If you have run with elevated permissions, the certificates are likely missing.");
+    console.log("-- SSL Disabled --");
+}
+
+
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3010');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
-var server = http.createServer(app);
-
+ var server;
+ if(enableSSL){
+   server = https.createServer(sslOptions, app);
+ } else {
+   server = http.createServer(app);
+ }
+ 
 /**
  * Listen on provided port, on all network interfaces.
  */
