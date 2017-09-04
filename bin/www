@@ -10,7 +10,7 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 
-var sslPath = "./ssl";
+var sslPath = "/ssl";
 var enableSSL = true;
 
 try {
