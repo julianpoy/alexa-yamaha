@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/action', function(req, res, next) {
 
-  var yamaha = new YamahaAPI("66.214.18.129");
+  var yamaha = new YamahaAPI("julianpoyourow.asuscomm.com");
 
   // yamaha.getAvailableInputs().then(function(inputs){
   //   console.log(inputs)
